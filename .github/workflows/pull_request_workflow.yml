@@ -22,7 +22,7 @@ jobs:
           cache: maven
 
       - name: Compile
-        run:
+        run: |
           chmod +x mvnw
           ./mvnw clean compile
 
