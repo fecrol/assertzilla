@@ -3,15 +3,51 @@ package com.github.fecrol.assertzilla.core;
 import com.github.fecrol.assertzilla.core.exceptions.TestFailedException;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tags({
+        @Tag("unit")
+})
+@DisplayName("Interaction Executor Tests")
 public class InteractionExecutorTests {
 
-    @Nested
+    @Test
     @Tags({
-            @Tag("unit")
+            @Tag("TC-0003")
     })
+    @DisplayName("TC-0003 No exception should be thrown when interactions without exception are executed")
+    void noExceptionShouldBeThrownWhenInteractionsWithoutExceptionAreExecuted() {
+        List<Interaction> listOfInteractionsWithoutException = List.of(
+                new InteractionWithoutException(),
+                new InteractionWithoutException()
+        );
+
+        assertDoesNotThrow(() -> InteractionExecutor.execute(listOfInteractionsWithoutException));
+    }
+
+    @Test
+    @Tags({
+            @Tag("TC-0004")
+    })
+    @DisplayName("TC-0004 Test Failed Exception should be thrown when interactions with exception are executed")
+    void testFailedExceptionShouldBeThrownWhenInteractionsWithExceptionAreExecuted() {
+        List<Interaction> listOfInteractionsWithInteractionThatThrowsException = List.of(
+                new InteractionWithException(),
+                new InteractionWithoutException()
+        );
+
+        assertThrows(
+                TestFailedException.class,
+                () -> InteractionExecutor.execute(listOfInteractionsWithInteractionThatThrowsException)
+        );
+    }
+
+    @Nested
     @DisplayName("Interaction Execution Result Tests")
     class InteractionExecutionResultTests {
 
