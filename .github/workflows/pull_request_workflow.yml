@@ -21,7 +21,10 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Compile Code
-        run:
+      - name: Compile
+        run: |
           chmod +x mvnw
           ./mvnw clean compile
+
+      - name: Test
+        run: ./mvnw clean test
